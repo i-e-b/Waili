@@ -1,0 +1,76 @@
+%
+%	LaTeX Macros
+%
+%   $Id: Macros.tex,v 4.2.4.1 1999/07/20 16:16:16 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\newcommand{\mynote}[1]{\subsubsection*{*** #1 ***}}
+
+\renewcommand{\phi}{\varphi}
+\newcommand{\dotp}[2]{\langle #1,#2 \rangle}
+\newcommand{\norm}[1]{\| #1 \|}
+\newcommand{\name}[1]{\emph{#1}}
+\newcommand{\CC}{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
+\newcommand{\libname}{WAILI}
+\newcommand{\liblogo}{\includegraphics{WAILI.eps}}
+\newcommand{\libtitle}{\libname\ --- Wavelets with Integer Lifting}
+
+\newcommand{\needsinclude}[1]{\#include $\langle$waili/#1$\rangle$}
+
+\newcommand{\geertemail}{\texttt{Geert.Uytterhoeven@cs.kuleuven.ac.be}}
+\newcommand{\filipemail}{\texttt{Filip.VanWulpen@cs.kuleuven.ac.be}}
+\newcommand{\maartenemail}{\texttt{Maarten.Jansen@cs.kuleuven.ac.be}}
+\newcommand{\waveletsemail}{\texttt{wavelets@cs.kuleuven.ac.be}}
+
+\newcommand{\geertwww}{\texttt{http://www.cs.kuleuven.ac.be/\~{}geert/}}
+\newcommand{\filipwww}{\texttt{http://www.cs.kuleuven.ac.be/\~{}filip/}}
+\newcommand{\maartenwww}{\texttt{http://www.cs.kuleuven.ac.be/\~{}maarten/}}
+\newcommand{\waveletswww}{\texttt{http://www.cs.kuleuven.ac.be/\~{}wavelets/}}
+
+\newcommand{\libemail}{\waveletsemail}
+\newcommand{\libwww}{\waveletswww}
+
+\newcommand{\geertauthor}{Geert Uytterhoeven, Department of Computer Science,
+Katholieke Universiteit Leuven, Belgium (\geertemail)}
+\newcommand{\filipauthor}{Filip Van Wulpen, Department of Computer Science,
+Katholieke Universiteit Leuven, Belgium (\filipemail)}
+\newcommand{\rev}[1]{\texttt{#1}\\}
+
+\newenvironment{license}{%
+    \small
+    \begin{center}%
+	{\bfseries \licensename\vspace{-.5em}}%
+    \end{center}%
+    \quotation
+}{}
+\newcommand\licensename{License Conditions}
+
+\newenvironment{acknowledgements}{%
+    \small
+    \begin{center}%
+	{\bfseries \acknowledgementsname\vspace{-.5em}}%
+    \end{center}%
+    \quotation
+}{}
+\newcommand\acknowledgementsname{Acknowledgements}
+
+\newcommand\itaacknowledgement{This research is supported by the Flemish
+Information Technology Action Program (`Vlaams Actieprogramma
+Informatietechnologie'), project number ITA/950244.}

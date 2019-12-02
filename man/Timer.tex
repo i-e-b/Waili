@@ -1,0 +1,98 @@
+%
+%	Timer Class
+%
+%   $Id: Timer.tex,v 4.1.2.1.2.1 1999/07/20 16:16:16 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Timer}{$ $Revision: 4.1.2.1.2.1 $ $}
+
+\subtitle{Name}
+    Timer --- Measurement of execution times
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This is a simple class for the measurement of execution times.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Timer.h}
+
+\function{Timer()}
+    Create a timer.
+
+\function{Timer(const~Timer\& t)}
+    Create a timer by copying timer \name{t}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{void Start(void)}
+    Start the timer.
+
+\function{void Stop(void)}
+    Stop the timer.
+
+\function{void Reset(void)}
+    Reset the timer to zero.
+
+\function{f32 GetReal(void)\ const}
+    Get the \name{Real} part of the run time.
+
+\function{f32 GetUser(void)\ const}
+    Get the \name{User} part of the run time.
+
+\function{f32 GetSystem(void)\ const}
+    Get the \name{System} part of the run time.
+
+\function{Timer GetStamp(void)\ const}
+    Get a time stamp copy of the timer.
+
+\function{int IsRunning(void)\ const}
+    Check whether the timer is running.
+
+\function{void Tic(void)}
+    Reset and start the timer.
+
+\function{void Toc(void)}
+    Dump the current \name{Real}, \name{User} and \name{System} run time to
+    \name{stderr}.
+
+\function{Timer operator$+$(const~Timer\& t)}
+\function{Timer operator$-$(const~Timer\& t)}
+    Add or subtract two timers and return a sum or difference timer.
+
+\function{void operator$+=$(const~Timer\& t)}
+\function{void operator$-=$(const~Timer\& t)}
+    Add or subtract a timer to or from the current timer.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{See Also}
+    The \name{times} function.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Timer.C,v 4.0 1997/05/05 09:42:23 geert Exp}
+     \rev{Timer.h,v 4.0 1997/05/05 09:47:07 geert Exp}
+
+\end{manpage}

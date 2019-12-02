@@ -1,0 +1,205 @@
+%
+%	Wavelet Classes
+%
+%   $Id: Wavelet.tex,v 4.6.2.4.2.1 1999/07/20 16:16:17 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Wavelet}{$ $Revision: 4.6.2.4.2.1 $ $}
+
+\subtitle{Name}
+    Wavelet --- Integer wavelet transforms using the \name{Lifting Scheme}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    The basic operational step of a wavelet transform is a filter bank with 2
+    kinds of filters: a low pass and a high pass filter. These 2 filters depend
+    on the type of wavelet. In a wavelet transform the filter operations are
+    performed iteratively on the low pass part of a signal.
+
+    The two-dimensional wavelet transform uses the same algorithm, applied to
+    both the rows and the columns of a matrix. One can consider the wavelet
+    transform as a `black box' operation: a matrix is transformed into another
+    matrix, its wavelet representation.
+
+    Here the filter operations are performed in integer math using techniques
+    based on the \name{Lifting Scheme}.  The sequence of Lifting steps is
+    called a `Cake Walk' and strongly depends on the wavelet type.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Wavelet.h}
+
+    \name{Wavelet} is an abstract base class. No instances can be declared.
+    Different wavelet filters are implemented through inheritance.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{int GetGStart()\ const}
+\function{int GetGEnd()\ const}
+\function{int GetHStart()\ const}
+\function{int GetHEnd()\ const}
+    Get the start respectively end position of the high pass (`G') respectively
+    low pass(`H') filter.
+
+\function{int GetShiftL(void)\ const}
+\function{int GetShiftH(void)\ const}
+    Get the number of steps (in base-$\sqrt{2}$!) the coefficients of the low
+    pass respectively high pass subband have to be shifted to the left to
+    obtain their real values.
+
+\function{u8 GetID(void)\ const}
+    Get the unique private ID for this type of wavelet.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{Wavelet$\ast$ Clone(void)\ const}
+    Make a copy of the current wavelet filter.
+
+\function{void CakeWalk(Lifting\& lifting)\ const}
+    Perform a `Cake Walk' operation on the lifting object \name{lifting}.
+
+\function{void ICakeWalk(Lifting\& lifting)\ const}
+    Perform an inverse `Cake Walk' operation on the lifting object
+    \name{lifting}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Static \\ Operations}
+
+\function{Wavelet$\ast$ CreateCDF(u\_int np, u\_int nd)}
+    Create a \name{Wavelet} object for some wavelet filters of the biorthogonal
+    Cohen-Daubechies-Feauveau family. \name{np} and \name{nd} are the numbers
+    of vanishing moments for the primal respectively dual wavelet function. The
+    following wavelet bases are available. Table entries are in the form
+    (\name{np}, \name{nd}):
+    \begin{center}\begin{tabular}{llllll}
+    $(1, 1)$ & $(1, 3)$ & $(1, 5)$ & $(2, 2)$ & $(2, 4)$ & $(2, 6)$ \\
+    $(4, 2)$ & $(4, 4)$ & $(4, 6)$ \\
+    \end{tabular}\end{center}
+    Note that $(1, 1)$ is the Haar basis, and $(1, 3)$ is the wavelet basis
+    used by Ricoh's CREW.
+
+    $(0, 0)$ is used for the lazy wavelet filter.
+
+\function{Wavelet$\ast$ CreateFromID(u8 id)}
+    Create a \name{Wavelet} object that corresponds to the unique private ID
+    \name{id}.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    Wavelet\_Lazy --- \name{Lazy} integer wavelet transform using the
+    		      \name{Lifting Scheme}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{Wavelet\_Lazy()}
+    Create a \name{Wavelet} object for the lazy integer wavelet transform.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    Wavelet\_CDF\_x\_y --- \name{Cohen-Daubechies-Feauveau} (x, y) integer
+			   wavelet transforms using the \name{Lifting Scheme}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{Wavelet\_CDF\_1\_1()}
+\function{Wavelet\_CDF\_1\_3()}
+\function{Wavelet\_CDF\_1\_5()}
+\function{Wavelet\_CDF\_2\_2()}
+\function{Wavelet\_CDF\_2\_4()}
+\function{Wavelet\_CDF\_2\_6()}
+\function{Wavelet\_CDF\_4\_2()}
+\function{Wavelet\_CDF\_4\_4()}
+\function{Wavelet\_CDF\_4\_6()}
+    Create a \name{Wavelet} object for the Cohen-Daubechies-Feauveau (x, y)
+    integer wavelet transform.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Note}
+    Internally there also exist the classes \name{LiftCoefI\_CDF\_?\_?}.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    Wavelet\_CRF\_13\_7, Wavelet\_SWE\_13\_7  --- Integer wavelet transforms
+						  using the \name{Lifting
+						  Scheme} for some more
+						  wavelets used by JPEG2000.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{Wavelet\_CRF\_13\_7()}
+\function{Wavelet\_SWE\_13\_7()}
+    Create a \name{Wavelet} object for the CRF (13, 7) and SWE (13, 7) integer
+    wavelet transforms.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Dependency \\ Graphs}
+    \begin{description}
+    \item[Fig.~\ref{fig:Wavelet}] Inheritance dependency graph for the Wavelet
+    class hierarchy (\emph{Wavelet}).
+    \end{description}
+
+    \begin{figure}[ht]\begin{center}
+    \resizebox{\textwidth}{!}{\includegraphics{Wavelet_dep.eps}}
+    \caption{Inheritance dependency graph for the Wavelet class hierarchy
+    (\emph{Wavelet}).}
+    \label{fig:Wavelet}
+    \end{center}\end{figure}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{See Also}
+    The \name{Lifting} and \name{Channel} classes.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Wavelet.C,v 4.1.2.3 1999/04/15 12:26:44 geert Exp}
+     \rev{Wavelet.h,v 4.1.2.4 1999/04/15 12:26:48 geert Exp}
+     \rev{Wavelet\_CDF\_1\_x.C,v 4.1 1997/05/05 09:42:33 geert Exp}
+     \rev{Wavelet\_CDF\_2\_x.C,v 4.2.2.1 1999/03/16 15:05:38 geert Exp}
+     \rev{Wavelet\_CDF\_4\_x.C,v 4.2.2.1 1999/03/16 15:05:39 geert Exp}
+     \rev{Wavelet\_JPEG2000.C,v 5.1.2.1 1999/04/15 10:06:05 geert Exp}
+
+\end{manpage}

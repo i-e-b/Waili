@@ -1,0 +1,178 @@
+%
+%	Lifting Operations
+%
+%   $Id: Lifting.tex,v 4.6.2.2.2.1 1999/07/20 16:16:16 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Lifting}{$ $Revision: 4.6.2.2.2.1 $ $}
+
+\subtitle{Name}
+    Lifting --- Generic class for integer \name{Lifting Scheme} steps
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This class provides a generic lifting step interface, to be used for
+    wavelet transforms using the \name{Lifting Scheme}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Lifting.h}
+
+    \name{Lifting} is an abstract base class. No instances can be declared.
+    Lifting steps on different types of data are implemented through
+    inheritance.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{void Lift\_L1R1\_FR(int primal, const~s16 b[2], const~u16 a)\ const}
+\function{void ILift\_L1R1\_FR(int primal, const~s16 b[2], const~u16 a)\ const}
+\function{void Lift\_L2R2\_FR(int primal, const~s16 b[4], const~u16 a)\ const}
+\function{void ILift\_L2R2\_FR(int primal, const~s16 b[4], const~u16 a)\ const}
+\function{void Lift\_L3R3\_FR(int primal, const~s16 b[6], const~u16 a)\ const}
+\function{void ILift\_L3R3\_FR(int primal, const~s16 b[6], const~u16 a)\ const}
+    Primal (\name{primal} $= 1$) and dual (\name{primal} $= 0$) integer lifting
+    steps with full rounding. \name{Lift\_LmRn\_FR} implements a lifting
+    operation of the form
+    \[ x_i \leftarrow x_i + \left\{ {\sum_{j=-m}^{n-1} b_{j+m} y_j \over a}
+       \right\}, \]
+    with $x_i$ and $y_i$ the low pass and high pass samples (or vice versa,
+    depending on the value of \name{primal}), and $\left\{\right\}$ a rounding
+    operation.
+    \name{ILift\_LmRn\_FR} is the corresponding inverse operation.
+
+\function{void Lift\_L1R1\_NR(int primal, const~s16 b[2], const~u16 a)\ const}
+\function{void ILift\_L1R1\_NR(int primal, const~s16 b[2], const~u16 a)\ const}
+\function{void Lift\_L2R2\_NR(int primal, const~s16 b[4], const~u16 a)\ const}
+\function{void ILift\_L2R2\_NR(int primal, const~s16 b[4], const~u16 a)\ const}
+\function{void Lift\_L3R3\_NR(int primal, const~s16 b[6], const~u16 a)\ const}
+\function{void ILift\_L3R3\_NR(int primal, const~s16 b[6], const~u16 a)\ const}
+    Primal (\name{primal} $= 1$) and dual (\name{primal} $= 0$) integer lifting
+    steps without rounding. \name{Lift\_LmRn\_FR} implements a lifting
+    operation of the form
+    \[ x_i \leftarrow a x_i + \sum_{j=-m}^{n-1} b_{j+m} y_j, \]
+    with $x_i$ and $y_i$ the low pass and high pass samples (or vice versa,
+    depending on the value of \name{primal}).
+    \name{ILift\_LmRn\_NR} is the corresponding inverse operation.
+
+\function{void Lift\_L1R1\_MX(int primal, const~s16 b[2], const~u16 a1,
+			      const~u16 a2)\ const}
+\function{void ILift\_L1R1\_MX(int primal, const~s16 b[2], const~u16 a1,
+			       const~u16 a2)\ const}
+\function{void Lift\_L2R2\_MX(int primal, const~s16 b[4], const~u16 a1,
+			      const~u16 a2)\ const}
+\function{void ILift\_L2R2\_MX(int primal, const~s16 b[4], const~u16 a1,
+			       const~u16 a2)\ const}
+\function{void Lift\_L3R3\_MX(int primal, const~s16 b[6], const~u16 a1,
+			      const~u16 a2)\ const}
+\function{void ILift\_L3R3\_MX(int primal, const~s16 b[6], const~u16 a1,
+			       const~u16 a2)\ const}
+    Primal ($\name{primal} = 1$) and dual (\name{primal} $= 0$) integer lifting
+    steps with mixed rounding. \name{Lift\_LmRn\_FR} implements a lifting
+    operation of the form
+    \[ x_i \leftarrow a_1 x_i + \left\{ {\sum_{j=-m}^{n-1} b_{j+m} y_j \over
+       a_2} \right\}, \]
+    with $x_i$ and $y_i$ the low pass and high pass samples (or vice versa,
+    depending on the value of \name{primal}), and $\left\{\right\}$ a rounding
+    operation.
+    \name{ILift\_LmRn\_MX} is the corresponding inverse operation.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Derived \\ Classes}
+    Lifting operations on various objects are available through classes derived
+    from the \name{Lifting} class:
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LiftChannelR --- Lifting operations on the rows of 2 \name{NTChannel}s
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{LiftChannelR(NTChannel$\ast$ lowpass, NTChannel$\ast$ highpass)}
+    Create a Lifting object for lifting operations on the rows of 2
+    \name{NTChannels}.
+    \name{lowpass} contains the low pass samples, while \name{highpass}
+    contains the high pass samples. Both \name{lowpass} and \name{highpass}
+    must have the same number of rows, and the number of columns of
+    \name{lowpass} and \name{highpass} must differ maximum 1.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LiftChannelC --- Lifting operations on the columns of 2 \name{NTChannel}s
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{LiftChannelC(NTChannel$\ast$ lowpass, NTChannel$\ast$ highpass)}
+    Create a Lifting object for lifting operations on the columns of 2
+    \name{NTChannel}s.
+    \name{lowpass} contains the low pass samples, while \name{highpass}
+    contains the high pass samples. Both \name{lowpass} and \name{highpass}
+    must have the same number of columns, and the number of rows of
+    \name{lowpass} and \name{highpass} must differ maximum 1.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Plans}
+    Add support for transforms of a rectangular subarea of a channel.
+    emph{???}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Dependency \\ Graphs}
+    \begin{description}
+    \item[Fig.~\ref{fig:Lifting}] Inheritance dependency graph for the lifting
+    class hierarchy (\emph{Lifting}).
+    \end{description}
+
+    \begin{figure}[h]\begin{center}
+    \resizebox{65mm}{!}{\includegraphics{Lifting_dep.eps}}
+    \caption{Inheritance dependency graph for the lifting class hierarchy
+    (\emph{Lifting}).}
+    \label{fig:Lifting}
+    \end{center}\end{figure}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{See Also}
+    The \name{Wavelet} and \name{Channel} classes.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Lifting.C,v 4.5.2.1 1999/07/15 10:18:15 geert Exp}
+     \rev{Lifting.h,v 4.3 1997/05/05 09:46:35 geert Exp}
+     \rev{Lifting.inline.h,v 4.0.2.1 1999/07/20 13:18:58 geert Exp}
+
+\end{manpage}

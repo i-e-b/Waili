@@ -1,0 +1,82 @@
+#
+#	Makefile for LaTeX2e documents (build)
+#
+#   $Id: Rules.LaTeX.build,v 4.1.4.2 1999/07/22 13:24:30 geert Exp $
+# 
+#   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+# 
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+# 
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+# -----------------------------------------------------------------------------
+# Makefile for LaTeX2e documents (build)
+# -----------------------------------------------------------------------------
+
+fake:		$(DOC).dvi $(EXTRA)
+
+$(DOC).dvi:	$(LINKS) $(TEXSRCS) $(TEXSTYLES) $(FIGS)
+
+show:		$(DOC).dvi
+		$(XDVI) $(DOC).dvi &
+
+draft:		$(DOC).ps
+		$(MULTI) $(DOC).ps
+
+bib:		$(DOC).bbl
+		$(RM) $(DOC).dvi
+		make $(DOC).dvi
+
+print:		$(DOC).ps
+		$(LPR) $(DOC).ps
+
+pdf:		$(DOC).pdf
+
+clean:
+		$(RM) *.aux *.dvi *.log *.toc *.bbl *.blg $(DOC).ps \
+		$(DOC).pdf $(GENFIGS) $(LINKS) $(EXTRACLEAN)
+
+# -----------------------------------------------------------------------------
+# Elementary build rules
+# -----------------------------------------------------------------------------
+
+%.dvi:		%.tex
+		$(LATEX) $<
+
+%.bbl:		%.aux
+		$(BIBTEX) $*
+
+%.ps:		%.dvi
+		$(DVIPS) $< -o
+
+%.pdf:		%.ps
+		$(PS2PDF) $<
+
+%.eps:		%.fig
+		$(FIG2PS) $< > $@
+
+%.eps:		%.pgm
+		$(PNMTOPS) $< > $@
+
+%.eps:		%.pgm.gz
+		$(ZCAT) $< | $(PNMTOPS) > $@
+
+%.eps:		%.gif
+		$(GIFTOPNM) $< | $(PNMTOPS) > $@
+
+%.eps:		%.eps.gz
+		$(ZCAT) $< > $@
+
+%:		$(LINKEDDIR)/%
+		ln -sf $<

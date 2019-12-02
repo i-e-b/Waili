@@ -1,0 +1,61 @@
+#FIG 3.1
+# 
+#   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+# 
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+# 
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# 
+Portrait
+Center
+Inches
+1200 2
+6 2625 1650 3675 2100
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 2625 1650 3675 1650 3675 2100 2625 2100 2625 1650
+4 0 -1 0 0 0 12 0.0000 4 135 720 2775 1950 LChannel\001
+-6
+6 525 1650 1575 2100
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 525 1650 1575 1650 1575 2100 525 2100 525 1650
+4 0 -1 0 0 0 12 0.0000 4 135 855 600 1950 NTChannel\001
+-6
+6 1575 450 2625 900
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 1575 450 2625 450 2625 900 1575 900 1575 450
+4 0 -1 0 0 0 12 0.0000 4 135 615 1800 750 Channel\001
+-6
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 3150 2100 1875 2850
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 3150 2100 4425 2850
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 2100 900 1050 1650
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 2100 900 3150 1650
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 2625 2850 3675 2850 3675 3300 2625 3300 2625 2850
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 1350 2850 2400 2850 2400 3300 1350 3300 1350 2850
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 3900 2850 4950 2850 4950 3300 3900 3300 3900 2850
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 3150 2100 3150 2850
+4 0 -1 0 0 0 12 0.0000 4 135 840 2700 3150 LChannelC\001
+4 0 -1 0 0 0 12 0.0000 4 135 840 3975 3150 LChannelR\001
+4 0 -1 0 0 0 12 0.0000 4 135 960 1388 3150 LChannelCR\001

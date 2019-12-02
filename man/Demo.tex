@@ -1,0 +1,90 @@
+%
+%	A Simple Demo Program
+%
+%   $Id: Demo.tex,v 4.6.2.1.2.1 1999/07/20 16:16:15 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\section{A simple demo program}
+
+\texttt{Lifting/test/Demo} is a simple interactive demo program that allows you
+to play with wavelet transforms. It understands the following commands:
+
+\begin{description}
+\item[\texttt{Help}]
+\item[\texttt{?}]\mbox{}\\
+    Display some help information.
+\item[\texttt{Quit}]
+\item[\texttt{Exit}]\mbox{}\\
+    Terminate the program.
+\item[\texttt{Load} \emph{image}]\mbox{}\\
+    Load an image from file \emph{image}. Make sure this file does exist!
+\item[\texttt{Save} \emph{image}]\mbox{}\\
+    Save the current image to file \emph{image}.
+\item[\texttt{View}]\mbox{}\\
+    View the current image using \emph{xv}. Make sure the \texttt{xv}
+    executable is in your path!
+\item[\texttt{Wavelet} $n$ $\widetilde{n}$]\mbox{}\\
+    Use the biorthogonal Cohen-Daubechies-Feauveau wavelet with $(n,
+    \widetilde{n})$ vanishing moments. Make sure you select a supported
+    wavelet!
+\item[\texttt{Wavelet} $n$]\mbox{}\\
+    Use a biorthogonal wavelet from the JPEG2000 draft. Values of $n$:
+    \begin{description}
+	\item[1] CRF (13, 7)
+	\item[2] SWE (13, 7)
+    \end{description}
+\item[\texttt{Fstep cr}]
+\item[\texttt{Fstep c}]
+\item[\texttt{Fstep r}]\mbox{}\\
+    Add one transform level. The transform can operate on both colums and rows
+    (default), or on the columns or rows only.
+\item[\texttt{Bstep}]\mbox{}\\
+    Remove one transform level.
+\item[\texttt{Ifwt}]\mbox{}\\
+    Perform the full inverse transform.
+\item[\texttt{Noise} \emph{var}]\mbox{}\\
+    Add white Gaussian noise with variance \emph{var}.
+\item[\texttt{Denoise}]\mbox{}\\
+    Denoise the wavelet transformed image by using soft thresholding with a GCV
+    (Generalized Cross Validation) estimated threshold. Only subbands that
+    count at least 1000 pixels will be thresholded.
+\item[\texttt{Backup}]\mbox{}\\
+    Create a backup of the current image for later comparison.
+\item[\texttt{Psnr}]\mbox{}\\
+    Calculate the PSNR (Peak Signal to Noise Ratio) of the current image,
+    compared to the backup image.
+\item[\texttt{Threshold} \emph{value}]\mbox{}\\
+    Perform hard thresholding with threshold value \emph{value}.
+\item[\texttt{Scale} \emph{value}]\mbox{}\\
+    Scale the image with factor \emph{value}.
+\item[\texttt{Histogram} \emph{level subband channel}]\mbox{}\\
+    View the histogram of subband \emph{subband} at level \emph{level} of the
+    decomposition of channel \emph{channel}.
+\item[\texttt{Entropy}]\mbox{}\\
+    Calculate the first order entropy (Shannon-Weaver) for this channel,
+    in bits per pixel.
+\item[\texttt{Yuv}]\mbox{}\\
+    Convert from RGB to YUVr (or vice versa).
+\end{description}
+
+All commands can be abbreviated.
+
+\subsection*{Revision}
+
+\rev{Demo.C,v 4.6.2.2 1999/04/15 10:10:14}

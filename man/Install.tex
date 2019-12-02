@@ -1,0 +1,85 @@
+%
+%	Installation
+%
+%   $Id: Install.tex,v 4.1.2.2.2.1 1999/07/20 16:16:15 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\section{Installation}
+
+\subsection{Requirements}
+
+Before you start building the library, make sure you have the following items
+at hand:
+\begin{itemize}
+\item a decent UNIX system,
+\item \emph{GNU Make},
+\item a \CC\ compiler that adheres to the \emph{ISO \CC\ Standard}, e.g.\
+    e.g.\ \emph{GNU \CC\ 2.7.2},
+\end{itemize}
+
+\subsection{Building the package}
+
+\begin{itemize}
+\item Extract the archive.
+\item Change the current directory to \texttt{Lifting}.
+\item Enter
+    \begin{quote}
+    \texttt{make}
+    \end{quote}
+    to build the package.
+\item For the experts, the following make targets are available:
+    \begin{itemize}
+    \item Configure the package:
+	\begin{quote}
+	\texttt{make config}
+	\end{quote}
+    \item Create the dependencies among the various source files:
+	\begin{quote}
+	\texttt{make depend}
+	\end{quote}
+    \item Clean up all object files and executables:
+	\begin{quote}
+	\texttt{make clean}
+	\end{quote}
+    \item Clean up all object files, executables and configuration files:
+	\begin{quote}
+	\texttt{make distclean}
+	\end{quote}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Additional notes}
+
+\begin{itemize}
+\item By default it is assumed that the \emph{TIFF} library is available on the
+    Linux platform, and that it's not available on the other platforms. If you
+    want to change this, you'll have to edit the \emph{TIFF$\ast$} definitions
+    in the file \texttt{Rules.config} (created by \texttt{make config}).
+\item Currently the \texttt{Makefile} assumes you're using \emph{GNU Make} and
+    \emph{GNU \CC\ 2.7.2}.
+\item The development was mainly done under \emph{Linux/ia32 2.0.x} and
+    \emph{2.2.x}, with some testing under \emph{Solaris/SPARC 2.5.x} and
+    \emph{2.6.x}, and \emph{Linux 2.0.x} through \emph{2.3.x} on non-Intel
+    platforms (\emph{m68k, PPC, AXP}). Your mileage may vary on other
+    systems.
+\item The linker might complain about undefined symbols on systems where the
+    native linker doesn't support constructors and \name{collect2} is used.
+\item If you want support for \emph{TIFF}, then you need the \emph{TIFF}
+    library.
+\end{itemize}

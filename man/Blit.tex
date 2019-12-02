@@ -1,0 +1,100 @@
+%
+%	Low-Level Block Operations
+%
+%   $Id: Blit.tex,v 4.1.2.1.2.1 1999/07/20 16:16:14 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Blit}{$ $Revision: 4.1.2.1.2.1 $ $}
+
+\subtitle{Name}
+    Blit --- Low-level block operations
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This package provides some frequently used low-level block operations.
+    All functions are template functions, allowing for different operand types.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Blit.h}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Operations}
+
+\function{void Copy(const~Type$\ast$ src, Type$\ast$ dst, u\_int len)}
+    Copy \name{len} objects from \name{src} to \name{dst}.
+
+\function{void Copy(const~Type$\ast$ src, Type$\ast$ dst)}
+    Copy the object pointed to by \name{src} to \name{dst}.
+
+\function{void Fill(Type$\ast$ dst, u\_int len, Type value)}
+    Fill \name{len} objects pointed to by \name{dst} with \name{value}.
+
+\function{void Clear(Type$\ast$ dst, u\_int len)}
+    Clear \name{len} objects pointed to by \name{dst}.
+
+\function{void Clear(Type$\ast$ dst)}
+    Clear the object pointed to by \name{dst}.
+
+\function{void CopyRect(const~Type$\ast$ src, u\_int sw, Type$\ast$ dst,
+			u\_int dw, u\_int cols, u\_int rows)}
+    Copy a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows from \name{src} to \name{dst}. The source area has
+    \name{sw} columns, while the destination area has \name{dw} columns.
+
+\function{void CopyRect(const~Type$\ast$ src, u\_int sw, u\_int sx, u\_int sy,
+			Type$\ast$ dst, u\_int dw, u\_int dx, u\_int dy,
+			u\_int cols, u\_int rows)}
+    Copy a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows from \name{src} at position (\name{sx}, \name{sy}) to
+    \name{dst} at position (\name{dx}, \name{dy}). The source area has
+    \name{sw} columns, while the destination area has \name{dw} columns.
+
+\function{void FillRect(Type$\ast$ dst, u\_int dw, u\_int cols, u\_int rows,
+			Type value)}
+    Fill a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows, pointed to by \name{dst} with \name{value}. The
+    destination area has \name{dw} columns.
+
+\function{void FillRect(Type$\ast$ dst, u\_int dw, u\_int dx, u\_int dy,
+			u\_int cols, u\_int rows, Type value)}
+    Fill a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows, pointed to by \name{dst} at position (\name{dx},
+    \name{dy}) with \name{value}. The destination area has \name{dw} columns.
+
+\function{void ClearRect(Type$\ast$ dst, u\_int dw, u\_int cols, u\_int rows)}
+    Clear a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows, pointed to by \name{dst}. The destination area has
+    \name{dw} columns.
+
+\function{void ClearRect(Type$\ast$ dst, u\_int dw, u\_int dx, u\_int dy,
+			 u\_int cols, u\_int rows)}
+    Clear a rectangular block of objects with \name{cols} columns and
+    \name{rows} rows, pointed to by \name{dst} at position (\name{dx},
+    \name{dy}). The destination area has \name{dw} columns.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+    \rev{Blit.h,v 4.0 1997/05/05 09:46:21 geert Exp}
+
+\end{manpage}

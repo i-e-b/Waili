@@ -1,0 +1,273 @@
+%
+%	Image Class
+%
+%   $Id: Image.tex,v 4.7.2.3.2.1 1999/07/20 16:16:15 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Image}{$ $Revision: 4.7.2.3.2.1 $ $}
+
+\subtitle{Name}
+    Image --- Generic image class
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This class provides a low-level image abstraction. An image consists of a
+    number of channels containing pixels (of type \texttt{PixType}).
+    Each channel can have a different size. No interpretation or format is
+    imposed on the channels and it's data.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Image.h}
+
+\function{Image()}
+    Create an empty image.
+
+\function{Image(u\_int channels)}
+    Create an empty image containing\name{channels} channels.
+
+\function{Image(u\_int cols, u\_int rows, u\_int channels = 1)}
+    Create an image with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{channels} is the number of
+    channels. All channels will have the same size.
+
+\function{Image(const~u\_int cols[], const~u\_int rows[], u\_int channels)}
+    Create an image with given dimensions. \name{cols} and \name{rows} are
+    arrays containing the number of columns respectively rows for every
+    channel, \name{channels} is the number of channels.
+
+\function{Image(const~Channel\& channel, u\_int channels = 1)}
+    Create an image containing\name{channels} channels. Every channel will be a
+    copy of \name{channel}.
+
+\function{Image(const~Channel$\ast$ channel[], u\_int channels)}
+    Create an image containing\name{channels} channels. The channels will be
+    initialized using the array of channels \name{channel}.
+
+\function{Image(const~Image\& im)}
+    Create a new image by copying image \name{im}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{ImageType Import(const~char$\ast$ filename,
+			   ImageFormat format = IF\_AUTO)}
+    Import an image from a file named \name{filename}, stored in a specific
+    format \name{format}. If \name{format} is IF\_AUTO, the routine will try
+    to guess the file format by examining the file name. The type of the image
+    is returned. Images are assumed to contain 8-bit data, which is converted
+    to the range $-128 \ldots 127$ for internal use.
+
+\function{void Export(const~char$\ast$ filename,
+		      ImageFormat format = IF\_AUTO)\ const}
+    Export the to a file named \name{filename} using the specific file format
+    \name{format}. If \name{format} is IF\_AUTO, the routine will try to guess
+    the file format by examining the file name. The pixel values are considered
+    to lay within the range $-128 \ldots 127$. If a pixel value doesn't fit, it
+    will be clipped.
+
+    Note: export in \name{IF\_TIFF} is not yet supported.
+
+\function{void Convert(ImageType from, ImageType to)}
+    Convert the image from type \name{from} to type \name{to}.
+    \emph{Not all conversions are implemented yet.}
+
+\function{u\_int GetChannels(void)\ const}
+\function{u\_int GetCols(void)\ const}
+\function{u\_int GetRows(void)\ const}
+    Get the number of channels, columns or rows of the image.
+
+\function{int GetOffsetX(void)\ const}
+\function{int GetOffsetY(void)\ const}
+    Get the offset of the first channel of the image in the universal
+    coordinate system.
+
+\function{Channel$\ast$\& operator[](u\_int channel)}
+\function{const$\ast$~Channel\& operator[](u\_int channel)\ const}
+    Access channel \name{channel}.
+
+\function{PixType\& \mbox{operator()}(u\_int c, u\_int r, u\_int ch = 0)}
+\function{const~PixType \mbox{operator()}(u\_int c, u\_int r, u\_int ch = 0)\
+	  const}
+    Access the `pixel' at column \name{c} and row \name{r} in channel
+    \name{ch}. This may refer to a wavelet coefficient instead of a real pixel
+    value if the channel is wavelet transformed.
+
+\function{void Clear(void)}
+    Clear all pixel values to zero.
+
+\function{void Resize(u\_int cols, u\_int rows)}
+    Change the number of columns and rows of the image to \name{cols}
+    respectively \name{rows}. The number of channels is unchanged.
+
+\function{void Resize(u\_int cols, u\_int rows, u\_int channels)}
+    Change the number of columns, rows and channels of the image to
+    \name{cols}, \name{rows} and \name{channels}. All channels will have the
+    same size.
+
+\function{Image\& operator$=$(const~Image\& im)}
+    Make a copy of image \name{im}.
+
+\function{Image$\ast$ Clone(void)\ const}
+    Make a copy of the current image.
+
+\function{void SetOffsetX(int offx)\ const}
+\function{void SetOffsetY(int offy)\ const}
+    Set the offset of the first channel of the image in the universal
+    coordinate system.
+
+\function{Image$\ast$ Crop(u\_int x1, u\_int y1, u\_int x2, u\_int y2)\ const}
+    Cut the image so the upper left corner is positioned at
+    (\name{x1}, \name{y1}), and the lower right corner at (\name{x2},
+    \name{y2}).
+
+\function{void Merge(const~Image\& im)}
+    Paste image \name{im} into the current image. The paste position is
+    determined by the offsets of \name{im}.
+
+\function{void Add(const~Image\& im)}
+\function{void Subtract(const~Image\& im)}
+    Add respectively subtract image \name{im} to (from) the current image. Both
+    images must have the same number of columns, rows and channels and their
+    corresponding channels must have the same structure.
+
+\function{Image$\ast$ Diff(const~Image\& im)\ const}
+    This function returns the difference image between the current image and
+    \name{im}. Both images must have the same number of columns, rows and
+    channels and their corresponding channels must have the same structure.
+
+\function{void InsertChannel(Channel\& data, u\_int ch)}
+    Replace channel number \name{ch} of the image by the contents of channel
+    \name{channel}.
+
+\function{void DeleteChannel(u\_int channel)}
+    Delete channel number \name{ch} from the image.
+
+\function{void Fwt(const~TransformDescriptor transform[], u\_int depth)}
+    Transform the image using the Fast Wavelet Transform. The two-dimensional
+    wavelet transform will be applied to all channels independently. The type
+    of wavelet transform is determined by the \name{transform} array and its
+    length \name{depth}.
+
+\function{void IFwt(void)}
+    Transform the image using the inverse Fast Wavelet Transform. The
+    two-dimensional inverse wavelet transform will be applied to all channels
+    independently.  This is the inverse operation of \name{Fwt}.
+
+\function{void Scale(f32 scale)}
+    Scale the image with scaling factor \name{scale}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Image Types \\ and Formats}
+    The following image types are defined:
+    \begin{center}\begin{tabular}{|l|l|}
+    \hline
+    \texttt{IT\_Unknown} & Unknown \\
+    \texttt{IT\_Mono}    & Monochrome (black/white) \\
+    \texttt{IT\_CIEY}    & Greyscale \\
+    \texttt{IT\_CIEL}    & CIE luminance \\
+    \texttt{IT\_RGB}     & RGB color \\
+    \texttt{IT\_CIEXYZ}  & CIE XYZ color \\
+    \texttt{IT\_CIELab}  & CIE L$^*$a$^*$b$^*$ color \\
+    \texttt{IT\_YUV}     & YUV \\
+    \texttt{IT\_YUVr}    & Reversible YUV \\
+    \hline
+    \end{tabular}\end{center}
+
+    The following image formats are defined:
+    \begin{center}\begin{tabular}{|l|l|}
+    \hline
+    \texttt{IF\_AUTO}     & Automatic \\
+    \texttt{IF\_PNMASCII} & Portable AnyMap ASCII \\
+    \texttt{IF\_PNMRAW}   & Portable AnyMap Binary \\
+    \texttt{IF\_TIFF}     & Tag(ged) Image File Format \\
+    \hline
+    \end{tabular}\end{center}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{See Also}
+    The \name{Channel}, \name{Wavelet}, \name{Color} and \name{ColorSpace}
+    classes.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Example}
+
+\begin{verbatim}
+//
+//      Simple image compression example
+//
+
+#ifndef NULL
+#define NULL    0
+#endif
+
+#include <waili/Image.h>
+
+int main(void)
+{
+    const char infile[] = "image.pgm";
+    const char outfile[] = "result.pgm";
+    double threshold = 20.0;
+    Image image;
+
+    // Read the image
+    image.Import(infile);
+
+    // Transform the image using the Cohen-Daubechies-Feauveau
+    // (2, 2) biorthogonal wavelets
+    Wavelet *wavelet = Wavelet::CreateCDF(2, 2);
+    TransformDescriptor transform[] = {
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet },
+	{ TT_ColsRows, wavelet }
+    };
+    image.Fwt(transform, sizeof(transform)/sizeof(*transform));
+
+    // Zero all entries smaller than the threshold
+    for (u_int ch = 0; ch < image.GetChannels(); ch++)
+	image[ch]->Threshold(threshold);
+
+    // Inverse wavelet transform
+    image.IFwt();
+
+    // Write the reconstructed image to a file
+    image.Export(outfile);
+    return(0);
+}
+\end{verbatim}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Image.C,v 4.4.2.4 1999/07/20 13:19:02 geert Exp}
+     \rev{Image.h,v 4.6.2.3 1999/07/20 13:18:57 geert Exp}
+     \rev{Example.C,v 4.0.2.1 1998/06/22 13:49:10 geert Exp}
+
+\end{manpage}

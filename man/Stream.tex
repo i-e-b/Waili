@@ -1,0 +1,141 @@
+%
+%	Stream Class
+%
+%   $Id: Stream.tex,v 4.1.2.3.2.1 1999/07/20 16:16:16 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Stream}{$ $Revision: 4.1.2.3.2.1 $ $}
+
+\subtitle{Name}
+    Stream --- Input/output with support for compression
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    Flexible file storage with support for simple data compression.
+    If a filename ends with \texttt{.gz} it will be compressed/decompressed
+    automatically using \name{gzip}.
+
+\function{Stream()}
+    Create a file handler for a stream.
+
+\function{Stream(const~char$\ast$ name, const~char$\ast$ type = "r")}
+    Create a file handler for a stream and open it.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Storage.h}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{void Read(u8$\ast$ x, u\_int cnt = 1)}
+\function{void Read(u16$\ast$ x, u\_int cnt = 1)}
+\function{void Read(u32$\ast$ x, u\_int cnt = 1)}
+\function{void Read(u64$\ast$ x, u\_int cnt = 1)}
+\function{void Read(s8$\ast$ x, u\_int cnt = 1)}
+\function{void Read(s16$\ast$ x, u\_int cnt = 1)}
+\function{void Read(s32$\ast$ x, u\_int cnt = 1)}
+\function{void Read(s64$\ast$ x, u\_int cnt = 1)}
+\function{void Read(f32$\ast$ x, u\_int cnt = 1)}
+\function{void Read(f64$\ast$ x, u\_int cnt = 1)}
+    Read \name{cnt} elements from the stream.
+
+\function{void Write(const~u8$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~u16$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~u32$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~u64$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~s8$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~s16$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~s32$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~s64$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~f32$\ast$ x, u\_int cnt = 1)}
+\function{void Write(const~f64$\ast$ x, u\_int cnt = 1)}
+    Write \name{cnt} elements to the stream.
+
+\function{void Read(u8\& x)}
+\function{void Read(u16\& x)}
+\function{void Read(u32\& x)}
+\function{void Read(u64\& x)}
+\function{void Read(s8\& x)}
+\function{void Read(s16\& x)}
+\function{void Read(s32\& x)}
+\function{void Read(s64\& x)}
+\function{void Read(f32\& x)}
+\function{void Read(f64\& x)}
+    Read the element \name{x} from the stream.
+
+\function{void Write(const~u8\& x)}
+\function{void Write(const~u16\& x)}
+\function{void Write(const~u32\& x)}
+\function{void Write(const~u64\& x)}
+\function{void Write(const~s8\& x)}
+\function{void Write(const~s16\& x)}
+\function{void Write(const~s32\& x)}
+\function{void Write(const~s64\& x)}
+\function{void Write(const~f32\& x)}
+\function{void Write(const~f64\& x)}
+    Write the element \name{x} to the stream.
+
+\function{void Puts(const~char$\ast$ s)}
+    Write the string \name{s} to the stream.
+
+\function{void Printf(const~char$\ast$ fmt, ...)}
+    Format and write a string to the stream.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{virtual~void Open(const~char$\ast$ name,
+			    const~char$\ast$ mode = "r")}
+    Open the stream using filename \name{name} and mode \name{mode}.
+
+\function{virtual~void Close(void)}
+    Close the stream.
+
+\function{virtual~void RawRead(void$\ast$ data, int size)}
+\function{virtual~void RawWrite(const~void$\ast$ data, int size)}
+    Read or write a raw block of memory from or to the stream. Note that no
+    endianness conversion will be done!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Endiannes}
+    All I/O operations are done using network byte order, i.e.\ most
+    significant byte first or big endian.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{See Also}
+    The \name{gzip} command.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Revision}
+     \rev{Storage.C,v 4.0.2.2 1999/07/20 13:14:18 geert Exp}
+     \rev{Storage.h,v 4.0.2.2 1999/07/20 13:14:16 geert Exp}
+
+\end{manpage}

@@ -1,0 +1,679 @@
+%
+%	Channel Class
+%
+%   $Id: Channel.tex,v 4.14.2.3.2.1 1999/07/20 16:16:14 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Channel}{$ $Revision: 4.14.2.3.2.1 $ $}
+
+\subtitle{Name}
+    Channel --- Generic channel class
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This class provides a low-level channel abstraction. A channel is a
+    (rectangular) matrix containing one-valued pixels (of type
+    \texttt{PixType}).
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Channel.h}
+
+    \name{Channel} is an abstract base class. No instances
+    can be declared.  Different channel types are implemented through
+    inheritance.
+
+\function{Channel()}
+    Create an empty channel.
+
+\function{Channel(u\_int cols, u\_int rows, int offx = 0, int offy = 0)}
+    Create a channel with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{offx} and \name{offy} are the
+    offsets of the upper left pixel in the universal coordinate system.
+
+\function{Channel(const~Channel\& channel)}
+    Create a new channel by copying channel \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{u\_int GetCols(void)\ const}
+\function{u\_int GetRows(void)\ const}
+    Get the number of columns respectively rows of the channel.
+
+\function{int GetOffsetX(void)\ const}
+\function{int GetOffsetY(void)\ const}
+    Get the offset of upper left pixel of the channel in the universal
+    coordinate system.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Static \\ Operations}
+
+\function{Channel$\ast$ CreateFromDescriptor(u\_int cols, u\_int rows,
+	const~TransformDescriptor transform[], u\_int depth,
+	int offsetx = 0, int offsety = 0)}
+    Create a channel with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{offsetx} and \name{offsety} are
+    the offsets of the upper left pixel in the universal coordinate system. The
+    channel will be pretransformed using the transform descriptor
+    \name{transform} with transform depth \name{depth}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{void GetMask(u\_int\& maskx, u\_int\& masky)\ const}
+    Get the coordinate masks for the offsets. A set bit in a mask corresponds
+    to a bit in the offset that can't be choosen freely without retransforming
+    the channel.
+
+\function{u\_int GetDepth(void)\ const}
+    Get the transform depth of the channel.
+
+\function{double Psnr(const~Channel\& channel, PixType maxval = 255)\ const}
+    Calculate the Peak Signal to Noise Ratio (in dB) between the current
+    channel en channel \name{channel}. \name{maxval} is the Peak Signal value.
+
+\function{u64$\ast$ FullHistogram(PixType\& min, PixType\& max,
+				  u64\& numpixels) const}
+    Create a histogram for the current channel. The lower histogram limit will
+    be put in \name{min}, the upper limit in \name{max}. The number of analyzed
+    pixels will be put in \name{numpixels}. The result is an array of length
+    $\name{max}-\name{min}+1$ containing the occurrency counts.
+
+\function{double Entropy(void) const}
+    Calculate the first order entropy (Shannon-Weaver) for this channel,
+    in bits per pixel.
+
+\function{PixType\& \mbox{operator()}(u\_int c, u\_int r)}
+\function{PixType \mbox{operator()}(u\_int c, u\_int r)\ const}
+    Access the `pixel' at column \name{c} and row \name{r}. This may refer to
+    a wavelet coefficient instead of a real pixel value if the channel is
+    wavelet transformed.
+
+\function{void Clear(void)}
+    Clear all pixel values to zero.
+
+\function{void Resize(u\_int cols, u\_int rows)}
+    Change the number of columns and rows of the channel to
+    \name{cols} respectively \name{rows}.
+
+\function{Channel$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{int SetOffsetX(void)\ const}
+\function{int SetOffsetY(void)\ const}
+    Change the offset of the channel in the universal coordinate system. If
+    you change the bits that are covered by the corresponding coordinate mask,
+    the channel will be retransformed.
+
+\function{Channel$\ast$ Crop(int x1, int y1, int x2, int y2)\ const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}).
+
+\function{void Merge(const~Channel\& channel)}
+    Paste \name{channel} into the current channel. The paste position is
+    determined by the offsets of \name{channel}.
+
+\function{void Add(const~Channel\& channel)}
+\function{void Subtract(const~Channel\& channel)}
+    Add respectively subtract \name{channel} to (from) the current channel.
+    Both channels must have the same number of columns, number of rows,
+    offsets and structure.
+
+\function{Channel$\ast$ Diff(const~Channel\& channel)\ const}
+    This function returns the difference channel between the current channel
+    and \name{channel}. Both channels must have the same number of columns,
+    number of rows, offsets and structure.
+
+\function{void Enhance(f32 m)}
+    Enhance the channel by multiplying all pixel values with \name{m}.
+    If the channel is lifted, then only its high-pass coefficients will
+    be changed.
+
+\function{void Enhance(int m, u\_int shift)}
+    Enhance the channel by multiplying all pixel values with \name{m} and
+    shifting the result \name{shift} binary positions to the right.
+    If the channel is lifted, then only its high-pass coefficients will
+    be changed.
+
+\function{LChannel$\ast$ PushFwtStepCR(const~Wavelet\& wavelet)}
+\function{LChannel$\ast$ PushFwtStepC(const~Wavelet\& wavelet)}
+\function{LChannel$\ast$ PushFwtStepR(const~Wavelet\& wavelet)}
+    Add one transform level, using the wavelet transform specified by
+    \name{wavelet}. The transform can operate on both columns and rows
+    (\name{PushFwtStepCR}), on the colums only (\name{PushFwtStepC}) or on the
+    rows only (\name{PushFwtStepR}). Note that the current channel will be
+    destroyed!!!
+
+    This function can return the following values:
+    \begin{itemize}
+    \item[\texttt{NULL}] The operation wasn't sucessful because the maximum
+    number of transform levels was already reached.
+    \item[\texttt{this}] If the result is equal to the current channel, the
+    operation was successful.
+    \item[Else] The operation was successful, and the current channel
+    should be deleted and replaced by the returned channel.
+    \end{itemize}
+
+\function{Channel$\ast$ PopFwtStep(void)}
+    Remove one transform level. This is the inverse operation of the last
+    \name{PushFwtStep$\ast$} operation.
+
+\function{u64 Threshold(double threshold, int soft = 0)}
+    Perform hard (\name{soft = 0}) or soft (\name{soft = 1}) thresholding with
+    the thresholding value \name{threshold}. The number of pixels that had a
+    value smaller than \name{threshold} is returned.
+
+\function{int IsLifted(void)\ const}
+    This function returns non-zero if the current channel is already lifted.
+    \emph{This should be removed later!! The user doesn't need to know what's
+    the internal representation of the channel!}
+
+\function{Channel$\ast$ Scale(f32 s, const~Wavelet\& wavelet)}
+    Scale the channel with scaling factor \name{scale}. Note that the current
+    channel will be destroyed!!!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Protected \\ Operations}
+
+\function{Channel$\ast$ UpScale(u\_int s, const~Wavelet\& wavelet)}
+    Scale the current channel up. The applied scaling factor is the next
+    power of 2 of \name{s} if \name{s} is not a power of 2 by itself.
+    Note that the current channel will be destroyed!!!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Protected \\ Operations}
+
+\function{void Destroy(void)}
+    Delete the contents of the channel and zero the number of columns and rows.
+
+\function{Channel$\ast$ DownScale(u\_int s, const~Wavelet\& wavelet)}
+    Scale the current channel down. The applied scaling factor is the previous
+    power of 2 of \name{s} if \name{s} is not a power of 2 by itself. Note
+    that the current channel will be destroyed!!!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Static \\ Protected \\ Operations}
+
+\function{int GetEven(int len)}
+\function{int GetOdd(int len)}
+    Calculate the number of even respectively odd coefficients for a signal
+    with length \name{len}.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Derived \\ Classes}
+    These are derived classes of the generic \name{Channel} class that
+    add support for non-transformed and wavelet transformed channels.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    NTChannel --- Class for a non-transformed channel.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{NTChannel()}
+    Create an empty non-transformed channel.
+
+\function{NTChannel(u\_int cols, u\_int rows, int offx = 0, int offy = 0)}
+    Create a non-transformed channel with given dimensions. \name{cols} and
+    \name{rows} are the number of columns respectively rows, \name{offx} and
+    \name{offy} are the offsets of the upper left pixel in the universal
+    coordinate system.
+
+\function{NTChannel(const~NTChannel\& channel)}
+    Create a new non-transformed channel by copying the non-transformed channel
+    \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{void GetMinMax(PixType\& min, PixType\& max, u\_int smoothing = 0)
+	  const}
+    Return the minimum and maximum pixel values in \name{min} respectively
+    \name{max}. \name{smoothing} defines the degree of neglection of
+    extraordinary pixel values.
+    \emph{Smoothing is not yet implemented}
+
+\function{s32$\ast$ Correlate(const~NTChannel\& channel, u\_int diff)\ const}
+    Calculate the correlation matrix between the current channel and
+    \name{channel}. \name{diff} indicates the difference of resolution level
+    between the current channel and the more coarse \name{channel}. Note that
+    the returned correlation matrix has the same dimensions as the current
+    channel.
+
+\function{u64$\ast$ Histogram(PixType min, PixType max)}
+    Create a histogram for the current channel. The lower histogram limit will
+    be \name{min}, the upper limit will be \name{max}. The result is an array
+    of length $\name{max}-\name{min}+1$ containing the occurrency counts.
+
+\function{u64 ThresholdHard(u\_int threshold)}
+\function{u64 ThresholdSoft(u\_int threshold)}
+    Perform hard or soft thresholding with the thresholding value
+    \name{threshold}. The number of pixels that had a value smaller than
+    \name{threshold} is returned.
+
+\function{u\_int OptimalGCVThreshold(void)\ const}
+    Calculate the optimal soft thresholding value using a technique called
+    Generalized Cross Validation. Note that the channel should contain at least
+    1000 pixels to give a meaningful result.
+
+\function{NTChannel$\ast$ DupliScale(u\_int s)\ const}
+    Create a scaled version of the current channel by duplicating the
+    original pixel values. \name{s} is the scaling factor.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{NTChannel$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{NTChannel$\ast$ Crop(int x1, int y1, int x2, int y2)\ const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}).
+
+\function{NTChannel$\ast$ Diff(const~Channel\& channel)\ const}
+    This function returns the difference channel between the current channel
+    and \name{channel}. Both channels must have the same number of columns,
+    number of rows, offsets and structure.
+
+\function{LChannel$\ast$ Fwt(const~TransformDescriptor transform[],
+			     u\_int depth)}
+    Transform the channel using the Fast Wavelet Transform. The two-dimensional
+    wavelet transform will be applied to all channels independently. The type
+    of wavelet transform is determined by the \name{transform} array and its
+    length \name{depth}. Note that the current channel will be destroyed!!!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Protected \\ Operations}
+
+\function{void Interpolate(f32 s)}
+    Scale the channel using a linear interpolation scheme.
+
+\function{double GCV(u\_int threshold)\ const}
+    Calculate the GCV value of the channel for Generalized Cross Validation.
+
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Protected \\ Operations}
+
+\function{NTChannel$\ast$ DownScale(u\_int s, const~Wavelet\& wavelet)}
+    Scale the current channel down. The applied scaling factor is the previous
+    power of 2 of \name{s} if \name{s} is not a power of 2 by itself.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LChannel --- Class for a wavelet transformed channel.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \name{LChannel} is an abstract base class. No instances can be declared.
+    Different wavelet transformed channel types are implemented through
+    inheritance.
+
+\function{LChannel(const~LChannel\& channel)}
+    Create a new channel by copying channel \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{Channel$\ast$\& operator[](SubBand band)}
+\function{const~Channel$\ast$\& operator[](SubBand band)\ const}
+    Get the subband of type \name{band}.
+    \emph{Make sure the subband does exist!}
+
+\function{TransformDescriptor$\ast$ GetTransform(void)}
+    Get a transform descriptor array for all transform levels.
+
+\function{int GetShift(SubBand band)}
+    Get the number of steps (in base-$\sqrt{2}$!) the coefficients of subband
+    \name{band} have to be shifted to the left to obtain their real values.
+
+\function{NTChannel$\ast$ IFwt(void)}
+    Transform the channel using the inverse fast wavelet transform. Note that
+    the current channel will be destroyed!!!
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{TransformType GetTransformType(void)\ const}
+    Get the transform type for this transform level.
+
+\function{LChannel$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{NTChannel$\ast$ IFwt(int x1, int y1, int x2, int y2)\ const}
+    Perform recursively the inverse fast wavelet transform on the rows and
+    columns of the channel determined by the upper left and lower right corner
+    respectively (\name{x1}, \name{y1}) and (\name{x2}, \name{y2}).
+
+\function{LChannel$\ast$ Crop(int x1, int y1, int x2, int y2)\ const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}).
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Protected \\ Operations}
+
+\function{LChannel(const~Wavelet\& filter, u\_int numsubbands, u\_int cols = 0,
+		   u\_int rows = 0)}
+    Create a channel with given dimensions. \name{numsubbands} is the number of
+    subbands, \name{cols} and \name{rows} are the number of columns
+    respectively rows.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Protected \\ Operations}
+
+\function{NTChannel$\ast$ IFwtStep(void)}
+    Perform one step of the inverse fast wavelet transform. Note that the
+    current channel will be destroyed!!!
+
+\function{void Lazy(const~NTChannel\& source)}
+    Calculate the Lazy Wavelet Transform of \name{source} and store the result
+    in the current channel.
+
+\function{void ILazy(NTChannel\& dest)\ const}
+    Calculate the inverse Lazy Wavelet Transform of the current channel and
+    put the result in \name{dest}.
+
+\function{void CakeWalk(void)}
+\function{void ICakeWalk(void)}
+    Perform the (inverse) `Cake Walk' operation on the current channel.
+
+\function{LChannel$\ast$ Crop\_rec(int x1, int y1, int x2, int y2,
+				   NTChannel$\ast$ top, NTChannel$\ast$ bottom,
+				   NTChannel$\ast$ left,
+				   NTChannel$\ast$ right) const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}). \name{top}, \name{bottom}, \name{left} and
+    \name{right} are the resulting borders in the LP-band of the higher
+    resolution level which affect lower resolutions.
+
+\function{void Merge\_rec(const Channel$\ast$ channel,
+			  NTChannel$\ast$ top, NTChannel$\ast$ bottom,
+			  NTChannel$\ast$ left, NTChannel$\ast$ right)}
+    Paste \name{channel} into the current channel. The paste position is
+    determined by the offsets of \name{channel}. \name{top}, \name{bottom},
+    \name{left} and \name{right} are the resulting borders in the LP-band of
+    the higher resolution level which affect lower resolutions.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Subband \\ Types}
+    Valid subband types are
+    \begin{center}\begin{tabular}{|l|l|}
+    \hline
+    LL & lowpass in both the vertical and the horizontal direction \\
+    LH & lowpass in the vertical, highpass in the horizontal direction \\
+    HL & highpass in the vertical, lowpass in the horizontal direction \\
+    HH & highpass in both the vertical and the horizontal direction \\
+    \hline
+    \end{tabular}\end{center}
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LChannelCR --- Class for a wavelet transformed channel (both columns and
+		   rows).
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{LChannelCR(const~Wavelet\& filter)}
+    Create an empty channel.
+
+\function{LChannelCR(const~Wavelet\& filter, u\_int cols, u\_int rows,
+		     int offx, int offy)}
+    Create a channel with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{offx} and \name{offy} are the
+    coordinates in the universal coordinate system.
+
+\function{LChannelCR(const~LChannelCR\& channel)}
+    Create a new channel by copying channel \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{u\_int GetClow(void)\ const}
+\function{u\_int GetChigh(void)\ const}
+\function{u\_int GetRlow(void)\ const}
+\function{u\_int GetRhigh(void)\ const}
+    Get the number of columns and rows in the low and high frequency subbands.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{LChannelCR$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{LChannelCR$\ast$ Diff(const~Channel\& channel)\ const}
+    This function returns the difference channel between the current channel
+    and \name{channel}. Both channels must have the same number of columns,
+    number of rows, offsets and structure.
+
+\function{LChannelCR$\ast$ Crop\_rec(int x1, int y1, int x2, int y2,
+				     NTChannel$\ast$ top,
+				     NTChannel$\ast$ bottom,
+				     NTChannel$\ast$ left,
+				     NTChannel$\ast$ right) const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}). \name{top}, \name{bottom}, \name{left} and
+    \name{right} are the resulting borders in the LP-band of the higher
+    resolution level which affect lower resolutions.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LChannelC --- Class for a wavelet transformed channel (columns only).
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{LChannelC(const~Wavelet\& filter)}
+    Create an empty channel.
+
+\function{LChannelC(const~Wavelet\& filter, u\_int cols, u\_int rows,
+		     int offx, int offy)}
+    Create a channel with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{offx} and \name{offy} are the
+    coordinates in the universal coordinate system.
+
+\function{LChannelC(const~LChannelC\& channel)}
+    Create a new channel by copying channel \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{u\_int GetRlow(void)\ const}
+\function{u\_int GetRhigh(void)\ const}
+    Get the number of rows in the low and high frequency subbands.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{LChannelC$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{LChannelC$\ast$ Diff(const~Channel\& channel)\ const}
+    This function returns the difference channel between the current channel
+    and \name{channel}. Both channels must have the same number of columns,
+    number of rows, offsets and structure.
+
+\function{LChannelC$\ast$ Crop\_rec(int x1, int y1, int x2, int y2,
+				    NTChannel$\ast$ top,
+				    NTChannel$\ast$ bottom,
+				    NTChannel$\ast$ left,
+				    NTChannel$\ast$ right) const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}). \name{top}, \name{bottom}, \name{left} and
+    \name{right} are the resulting borders in the LP-band of the higher
+    resolution level which affect lower resolutions.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{Name}
+    LChannelR --- Class for a wavelet transformed channel (rows only).
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+
+\function{LChannelR(const~Wavelet\& filter)}
+    Create an empty channel.
+
+\function{LChannelR(const~Wavelet\& filter, u\_int cols, u\_int rows,
+		     int offx, int offy)}
+    Create a channel with given dimensions. \name{cols} and \name{rows} are the
+    number of columns respectively rows, \name{offx} and \name{offy} are the
+    coordinates in the universal coordinate system.
+
+\function{LChannelR(const~LChannelR\& channel)}
+    Create a new channel by copying channel \name{channel}.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Public \\ Operations}
+
+\function{u\_int GetClow(void)\ const}
+\function{u\_int GetChigh(void)\ const}
+    Get the number of columns in the low and high frequency subbands.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Virtual \\ Operations}
+
+\function{LChannelR$\ast$ Clone(void)\ const}
+    Make a copy of the current channel.
+
+\function{LChannelR$\ast$ Diff(const~Channel\& channel)\ const}
+    This function returns the difference channel between the current channel
+    and \name{channel}. Both channels must have the same number of columns,
+    number of rows, offsets and structure.
+
+\function{LChannelR$\ast$ Crop\_rec(int x1, int y1, int x2, int y2,
+				    NTChannel$\ast$ top,
+				    NTChannel$\ast$ bottom,
+				    NTChannel$\ast$ left,
+				    NTChannel$\ast$ right) const}
+    Get a rectangular part of the current channel, of which the upper left
+    corner is positioned at (\name{x1}, \name{y1}), and the lower right corner
+    at (\name{x2}, \name{y2}). \name{top}, \name{bottom}, \name{left} and
+    \name{right} are the resulting borders in the LP-band of the higher
+    resolution level which affect lower resolutions.
+
+% -----------------------------------------------------------------------------
+
+\separator
+
+\subtitle{TransformDescriptor}
+    The TransformDescriptor determines the kind of wavelet transform for one
+    transform level. It contains 2 parts:
+
+    \variable{TransformType type}
+    \name{type} is the transform type and can be one of:
+    \begin{center}\begin{tabular}{|l|l|}
+    \hline
+    \texttt{TT\_ColsRows} & Transform both columns and rows \\
+    \texttt{TT\_Cols}     & Transform columns only \\
+    \texttt{TT\_Rows}     & Transform rows only \\
+    \hline
+    \end{tabular}\end{center}
+
+    \variable{const~Wavelet$\ast$ filter}
+    \name{filter} is a pointer to a wavelet filter.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Dependency \\ Graphs}
+    \begin{description}
+    \item[Fig.~\ref{fig:Channel}] Inheritance dependency graph for the channel
+    class hierarchy (\emph{Channel}).
+    \end{description}
+
+    \begin{figure}[ht]\begin{center}
+    \resizebox{100mm}{!}{\includegraphics{Channel_dep.eps}}
+    \caption{Inheritance dependency graph for the channel class hierarchy
+    (\emph{Channel}).}
+    \label{fig:Channel}
+    \end{center}\end{figure}
+
+\subtitle{See Also}
+    The \name{Wavelet} and \name{Lifting} classes.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Channel.C,v 4.4.2.2 1999/04/15 09:35:09 geert Exp}
+     \rev{Channel.h,v 4.5.2.3 1999/07/20 13:18:57 geert Exp}
+     \rev{LChannel.C,v 4.5.2.2 1999/07/20 13:19:02 geert Exp}
+     \rev{LChannel.h,v 4.3.2.2 1999/07/20 13:18:57 geert Exp}
+     \rev{LChannelC.C,v 4.6.2.1 1999/07/20 13:19:02 geert Exp}
+     \rev{LChannelC.h,v 4.3.2.1 1999/07/20 13:18:57 geert Exp}
+     \rev{LChannelCR.C,v 4.6.2.1 1999/07/20 13:19:03 geert Exp}
+     \rev{LChannelCR.h,v 4.3.2.1 1999/07/20 13:18:58 geert Exp}
+     \rev{LChannelR.C,v 4.6.2.1 1999/07/20 13:19:04 geert Exp}
+     \rev{LChannelR.h,v 4.3.2.1 1999/07/20 13:18:58 geert Exp}
+     \rev{NTChannel.C,v 4.12.2.3 1999/07/20 13:19:04 geert Exp}
+     \rev{NTChannel.h,v 4.8.2.1 1999/07/20 13:18:58 geert Exp}
+
+\end{manpage}

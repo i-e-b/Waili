@@ -1,0 +1,76 @@
+%
+%	Utility Routines
+%
+%   $Id: Util.tex,v 4.1.2.1.2.1 1999/07/20 16:16:17 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Util}{$ $Revision: 4.1.2.1.2.1 $ $}
+
+\subtitle{Name}
+    Utility --- Utility routines
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This file contains some miscellaneous utility routines and definitions.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Util.h}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Operations}
+
+\function{void Die(const~char$\ast$ fmt, \ldots)}
+    Exit the program with a formatted error message.
+
+\variable{NotYetImplemented}
+    Exit the program with a verbose `Not yet implemented' message.
+
+\function{Type Min(Type x, Type y)}
+    Calculate the minimum of two objects.
+
+\function{Type Max(Type x, Type y)}
+    Calculate the maximum of two objects.
+
+\function{int Odd(int x)}
+    Check whether a number is odd.
+
+\function{int Even(int x)}
+    Check whether a number is even.
+
+\function{Type Abs(Type x)}
+    Calculate the absolute value of a number.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Definitions}
+
+\variable{EPS}
+    $\varepsilon$-value.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Util.C,v 4.0.2.2 1999/07/20 12:34:51 geert Exp}
+     \rev{Util.h,v 4.0 1997/05/05 09:47:22 geert Exp}
+
+\end{manpage}

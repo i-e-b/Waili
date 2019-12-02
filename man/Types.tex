@@ -1,0 +1,90 @@
+%
+%	Data Types
+%
+%   $Id: Types.tex,v 4.1.2.1.2.1 1999/07/20 16:16:17 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\begin{manpage}{\libtitle}{Types}{$ $Revision: 4.1.2.1.2.1 $ $}
+
+\subtitle{Name}
+    Types --- Platform independent type definitions
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Description}
+    This package provides some platform independent type definitions for very
+    common types of specific sizes.
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Declaration}
+    \needsinclude{Types.h}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Generic Types}
+    Available types are:
+    \begin{itemize}
+    \item Unsigned integer
+
+    \begin{tabular}{|l|l|}
+    \hline
+    \texttt{u8}  & 8 bit unsigned integer \\
+    \texttt{u16} & 16 bit unsigned integer \\
+    \texttt{u32} & 32 bit unsigned integer \\
+    \texttt{u64} & 64 bit unsigned integer \\
+    \hline
+    \end{tabular}
+
+    \item Signed integer
+
+    \begin{tabular}{|l|l|}
+    \hline
+    \texttt{s8}  & 8 bit signed integer \\
+    \texttt{s16} & 16 bit signed integer \\
+    \texttt{s32} & 32 bit signed integer \\
+    \texttt{s64} & 64 bit signed integer \\
+    \hline
+    \end{tabular}
+
+    \item \name{IEEE} Floating point
+
+    \begin{tabular}{|l|l|}
+    \hline
+    \texttt{f32} & 32 bit floating point \\
+    \texttt{f64} & 64 bit floating point \\
+    \hline
+    \end{tabular}
+    \end{itemize}
+
+\subtitle{Pixel type}
+    All pixels are of type \texttt{PixType}:
+
+    \begin{tabular}{|l|l|}
+    \hline
+    \texttt{PixType} & 16 bit signed integer \\
+    \hline
+    \end{tabular}
+
+% -----------------------------------------------------------------------------
+
+\subtitle{Revision}
+     \rev{Types.h,v 4.0 1997/05/05 09:47:15 geert Exp}
+
+\end{manpage}

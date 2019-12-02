@@ -1,0 +1,61 @@
+#FIG 3.2
+# 
+#   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+# 
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+# 
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# 
+Landscape
+Center
+Inches
+A4     
+100.00
+Single
+0
+1200 2
+0 32 #aeaeae
+6 2700 1500 3300 2100
+2 2 0 1 7 0 5 0 -1 0.000 0 0 -1 0 0 5
+	 2700 1500 3300 1500 3300 2100 2700 2100 2700 1500
+4 0 0 0 0 16 24 0.0000 4 285 120 2940 1942 I\001
+-6
+6 3300 2100 3900 2700
+2 2 0 1 7 0 5 0 -1 0.000 0 0 -1 0 0 5
+	 3300 2100 3900 2100 3900 2700 3300 2700 3300 2100
+4 0 0 0 0 16 24 0.0000 4 285 210 3495 2542 L\001
+-6
+6 3900 2700 4500 3300
+2 2 0 1 7 0 5 0 -1 0.000 0 0 -1 0 0 5
+	 3900 2700 4500 2700 4500 3300 3900 3300 3900 2700
+4 0 0 0 0 16 24 0.0000 4 285 120 4140 3142 I\001
+-6
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 2700 2700 5100 2700
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 3900 2100 2700 2100
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 3300 1500 3300 2700
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 3900 3900 3900 1500
+2 2 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 5
+	 2700 1500 7500 1500 7500 6300 2700 6300 2700 1500
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 5100 1500 5100 6300
+2 1 0 5 32 7 0 0 -1 0.000 1 0 7 0 0 2
+	 2700 3900 7500 3900
+2 1 0 5 0 7 0 0 -1 0.000 1 0 -1 0 0 7
+	 2700 3900 3000 3900 3900 5100 5100 1500 6300 5100 7200 3900
+	 7500 3900
+2 1 0 1 18 18 0 0 20 0.000 0 0 -1 0 0 4
+	 5100 2025 4500 3900 5700 3900 5100 2025

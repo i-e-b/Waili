@@ -1,0 +1,213 @@
+%
+%	Design and Implementation of the wavelet transform library
+%
+%   $Id: Design.tex,v 4.5.2.3.2.1 1999/07/20 16:16:15 geert Exp $
+% 
+%   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+%   You should have received a copy of the GNU General Public License
+%   along with this program; if not, write to the Free Software
+%   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+
+\section{Design and Implementation of \libname}
+
+\libname\ is meant to operate on two-dimensional images of various kinds.
+Applications are situated in image processing.
+
+
+\subsection{Design decisions}
+
+This section discusses some of the design decisions we made for this library.
+For more information about the theoretical foundations behind the library,
+please refer to `Wavelet Transforms Using the Lifting Scheme' (Report
+ITA-Wavelets-WP1.1) \cite{ITA-Wavelets-WP1.1,UytVWuJanRooBul98}.
+
+We chose to implement two-dimensional wavelet transforms using the integer
+version of the Lifting Scheme. The wavelets we use are a subclass of the
+Cohen-Daubechies-Feauveau family of biorthogonal wavelets.
+
+\subsubsection{The Lifting Scheme}
+
+The Lifting Scheme \cite{swe:lift1,swe:lift2,swe:spie95} provides a fast and
+simple algorithm for arbitrary wavelet transforms \cite{ds:factor}. Furthermore
+the inverse transform is trivial to find.
+
+Although the Lifting Scheme allows to transform signals with a finite length
+without extending the signal, we did not choose to take this approach. Instead
+we use the classical symmetric extension \cite{bris:acha96} because it's
+easier to implement and suffices for the applications we have in mind.
+
+
+\subsubsection{The integer wavelet transform}
+
+In many applications (e.g.\ image compression and processing) the input data
+consists of integer samples only. In addition the storage and encoding of
+integer numbers is easier, compared to floating point numbers.
+
+To take advantage of this we use the integer version of the Lifting Scheme,
+which maps integers to integers and is reversible, retaining the perfect
+reconstruction property \cite{cdsy:integer}.
+
+All arithmetic operations are done in 16 bit. This should suffice for
+applications where the input data is 8 bit wide. Of course this can easily be
+changed if necessary.
+
+
+\subsubsection{Cohen-Daubechies-Feauveau biorthogonal wavelets}
+
+The key benefits of the Cohen-Daubechies-Feauveau biorthogonal wavelets \cite{coh-dau-fea:biorthogonal} are:
+\begin{itemize}
+\item They have finite support. This preserves the locality of image features.
+\item The scaling function $\phi(x)$ is always symmetric, and the wavelet
+      function $\psi(x)$ is always symmetric or antisymmetric. This is
+      important for image processing operations.
+\item Its filter coefficients are of the form $z\over2^n$, with $z \in
+      \mathbf{Z}$ and $n \in \mathbf{N}$. This simplifies the implementation.
+      But unfortunately this feature isn't always preserved by the
+      decomposition in lifting steps.
+\end{itemize}
+
+We choose not to use wavelets with more than 6 vanishing moments to restrict
+the filter lengths. Longer filters have less locality and thus perform worse in
+image processing applications, in spite of their increase in smoothness.
+
+We implemented the following wavelet transforms of this family($(n, \tilde{n})$
+means that the primal wavelet has $n$ vanishing moments, while the dual wavelet
+has $\tilde{n}$ vanishing moments):
+\begin{description}
+\item[\boldmath{(1, x)}:] $(1, 1)$, $(1, 3)$, $(1, 5)$
+\item[\boldmath{(2, x)}:] $(2, 2)$, $(2, 4)$, $(2, 6)$
+\item[\boldmath{(4, x)}:] $(4, 2)$, $(4, 4)$, $(4, 6)$
+\end{description}
+We deliberately didn't implement any of the $(3, x)$ or $(5, x)$ wavelet
+transforms because their lifting steps require divisions by 3 or 5, which are
+not reversible in integer math. $(6, x)$ aren't implemented either because they
+require more than 16 bits (for 8 bit input data).
+
+
+\subsubsection{Wavelets and translation-invariance}
+
+A disadvantage of the wavelet transform is that it's not translation-invariant:
+if the image is translated before performing the wavelet transform, the result
+is not a translated version of the wavelet transform of the original image.
+The redundant wavelet transform is translation-invariant, but it needs much
+more memory and processing time, so this isn't an option in many applications.
+
+Since we wanted to allow crop and merge operations on wavelet transformed
+images we came up with the following scheme.
+
+If each transform level is considered independently, one step of a wavelet
+transform is translation-invariant if the translation is limited to an even
+number of pixels. Thus we associate with every matrix \emph{coordinates} (a
+horizontal and vertical offset for the upper left pixel) which
+depend on the transform level. At every transform level we have two versions of
+the wavelet transform: an \emph{even} and an \emph{odd} version. Which
+transform is used depends on the parity of the offset.
+
+If the parities of the coordinates match at each level, we can merge two
+images without retransforming one of them. If they don't match, we have to
+retransform one image. The main idea behind this scheme is that in many cases
+the coordinates of the subimage that will be pasted into another image are
+known in advance, so it can be transformed correctly. An example of this is the
+creation of one large image by concatenating several separately created
+subimages.
+
+
+\subsection{Implementation}
+
+The software library is written in \CC. We extensively use features of the
+ISO \CC\ Standard, which was finalized in November 1997 (from now on called
+\emph{\CC\ 97}), since they provide a great enrichment of the \CC\ language and
+allow for a cleaner design.
+
+Unfortunately there aren't many compilers that adhere to \CC\ 97 yet. The
+development was done using \emph{GNU \CC\ 2.7.2} and \emph{egcs 1.0}.
+Fortunately these compilers are available for about any platform, and they're
+free\footnote{Available from \texttt{ftp://prep.ai.mit.edu/pub/gnu/} and
+\texttt{http://egcs.cygnus.com/}.}!
+
+
+\subsubsection{\emph{Image} objects}
+
+An \emph{Image} consists of one or more independent channels, thus allowing for
+different sizes and wavelet transform types per channel. No interpretation or
+format is imposed on the channels and its data. The actual meaning of the
+image data can be freely choosen by the user. Examples are grayscale, RGB, YUV
+or Lab color, etc.\ \ldots
+
+
+\subsubsection{\emph{Channel} objects}
+
+The basic building block of the library is the \emph{Channel}. A channel is a
+rectangular matrix containing one-valued pixels. A channel can be
+non-transformed (a \emph{NTChannel}), or wavelet-transformed (a
+\emph{LChannel}\footnote{Rumors say that \emph{NT} and \emph{L} refer to
+two popular operating systems --- with the goal of this project to convert as
+many NTChannels to LChannels as possible --- but this hasn't been confirmed
+officially.}).
+
+Since a wavelet transform is some kind of \emph{recursive} transform, a
+LChannel contains some subchannels (subbands), which can be either
+non-transformed or wavelet-transformed. The number of subchannels in a LChannel
+depends on the type of wavelet transform. You can have the following
+combinations:
+
+\begin{description}
+\item[\emph{LChannelCR}] Obtained by transforming both the columns and
+rows of a NTChannel. As a result, you have 4 subbands:
+\begin{description}
+\item[LL] Low pass band in both the horizontal and the vertical direction,
+\item[LH] Low pass band in the vertical direction, high pass in the horizontal
+	  direction,
+\item[HL] High pass band in the vertical direction, low pass in the horizontal
+	  direction,
+\item[HH] High pass band in both the horizontal and the vertical direction.
+\end{description}
+
+\item[\emph{LChannelC}] Obtained by transforming only the columns of a
+NTChannel. As a result, you have 2 subbands:
+\begin{description}
+\item[L] Low pass band in the vertical direction,
+\item[H] High pass band in the vertical direction.
+\end{description}
+
+\item[\emph{LChannelR}] Obtained by transforming only the rows of a
+NTChannel. As a result, you have 2 subbands:
+\begin{description}
+\item[L] Low pass band in the horizontal direction,
+\item[H] High pass band in the horizontal direction.
+\end{description}
+\end{description}
+
+Fig.~\ref{fig:eg_transform} shows an example of a channel after two transform
+levels.
+
+\begin{figure}\begin{center}
+\resizebox{100mm}{!}{\includegraphics{Decomposition.eps}}
+\caption{Example of a channel after two transform levels. In the first step
+both the columns and the rows are transformed, in the second step only the
+columns are transformed.}
+\label{fig:eg_transform}
+\end{center}\end{figure}
+
+
+\subsubsection{\emph{Wavelet} objects}
+
+A \emph{Wavelet} represents the filters and lifting steps associated with a
+specific wavelet transform. Some wavelet transforms of the
+Cohen-Daubechies-Feauveau family are implemented.
+
+You can add your own favorite wavelet transform if you have a decomposition in
+integer lifting steps for it.
+

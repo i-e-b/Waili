@@ -1,0 +1,45 @@
+#FIG 3.1
+# 
+#   Copyright (C) 1996-1999 Department of Computer Science, K.U.Leuven, Belgium
+# 
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+# 
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# 
+Portrait
+Center
+Inches
+1200 2
+6 450 450 3450 2100
+6 450 1650 1725 2100
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 450 1650 1725 1650 1725 2100 450 2100 450 1650
+4 0 -1 0 0 0 12 0.0000 4 135 1005 600 1950 LiftChannelR\001
+-6
+6 2175 1650 3450 2100
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 2175 1650 3450 1650 3450 2100 2175 2100 2175 1650
+4 0 -1 0 0 0 12 0.0000 4 135 1005 2325 1950 LiftChannelC\001
+-6
+6 1425 450 2475 900
+2 2 0 1 -1 7 0 0 -1 0.000 0 0 -1 0 0 5
+	 1425 450 2475 450 2475 900 1425 900 1425 450
+4 0 -1 0 0 0 12 0.0000 4 180 495 1725 750 Lifting\001
+-6
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 1950 900 1125 1650
+2 1 0 1 -1 7 0 0 -1 0.000 0 0 -1 1 0 2
+	1 1 1.00 60.00 120.00
+	 1950 900 2775 1650
+-6
